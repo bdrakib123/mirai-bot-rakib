@@ -1,18 +1,14 @@
 {
     "language": "en",
     "keyActive": "",
-    "DeveloperMode": false,
+    "DeveloperMode": true,
     "autoCreateDB": true,
     "notiGroup": true,
     "NOTIFICATION": true,
     "allowInbox": false,
     "autoClean": true,
-    "commandDisabled": [
-        "sim.js"
-    ],
-    "eventDisabled": [
-        "join.js"
-    ],
+    "commandDisabled": [],
+    "eventDisabled": [],
     "EMAIL": "",
     "PASSWORD": "",
     "OTPKEY": "",
@@ -236,4 +232,4 @@
         "autoUnsend": true,
         "delayUnsend": 20
     }
-}
+    }
