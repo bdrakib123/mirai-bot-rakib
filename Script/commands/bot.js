@@ -152,7 +152,7 @@ module.exports.handleEvent = async function({ api, event, args, Threads, Users }
    };
   
    if ((event.body.toLowerCase() == "😒") || (event.body.toLowerCase() == "🙄")) {
-     return api.sendMessage("️ এইভাবে না থাকিয়ে এই নাও বস hoonএর আইডি যাও ইনবক্সে লুতুপুতু করো https://www.facebook.com/hoon420😘", threadID);
+     return api.sendMessage("️ এইভাবে না থাকিয়ে থেকে, এই নাও বস hoon এর আইডি যাও ইনবক্সে লুতুপুতু করো😘 https://www.facebook.com/hoon420", threadID);
    };
 
    if ((event.body.toLowerCase() == "AMAKE KEW VALOBASHE NA") || (event.body.toLowerCase() == "amake kew valobashe na") || (event.body.toLowerCase() == "Aj kew nai bole")) {
