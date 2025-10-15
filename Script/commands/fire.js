@@ -1,7 +1,7 @@
 module.exports.config = {
   name: "fire",
-  version: "2.3.0-bn",
-  hasPermssion: 2,
+  version: "2.4.0-bn",
+  hasPermssion: 0,
   credits: "Hoon (Royal Edition)",
   description: "🔥 রাজকীয় আগুন মোড চালু করো",
   commandCategory: "fun",
@@ -14,11 +14,9 @@ module.exports.run = async function ({ api, event, args }) {
   const sender = event.senderID;
   const threadID = event.threadID;
 
-  if (sender !== hoonID) return; // Non-HOON চুপ থাকবে
-
   const sub = (args[0] || "").toLowerCase();
 
-  // 🔥 Fire ON cinematic messages
+  // HOON cinematic messages
   const fireLines = [
     "🔥 সতর্কতা! ফায়ার মোড চালু হচ্ছে…",
     "⚡ প্রসেসিং পাওয়ার বেড়ে গেছে 9000+ ⚙️",
@@ -28,7 +26,6 @@ module.exports.run = async function ({ api, event, args }) {
     "💥 Boom! Chatroom now under fire control 🚀"
   ];
 
-  // ❄️ Fire OFF cinematic messages
   const coolLines = [
     "🧊 ফায়ার মোড বন্ধ করা হচ্ছে…",
     "💧 তাপমাত্রা নেমে আসছে ধীরে ধীরে…",
@@ -37,20 +34,56 @@ module.exports.run = async function ({ api, event, args }) {
     "🧘‍♂️ চ্যাটে এখন ঠাণ্ডা হাওয়া বইছে…"
   ];
 
-  if (sub === "on") {
-    fireLines.forEach((msg, i) => {
-      setTimeout(() => api.sendMessage(msg, threadID), i * 2000); // প্রতি ২ সেকেন্ডে
-    });
-    return;
-  }
+  // Non-HOON cinematic warning messages
+  const nonHoonFire = [
+    "⚠️ তুমি কেবল প্রজা! HOON ছাড়া ফায়ার মোড চালানো যাবে না!",
+    "🔥 তবে তুমি আগুনের উত্তাপ অনুভব করতে পারছো 😎",
+    "💨 চুপচাপ দাঁড়িয়ে থাকো, মহারাজের আগুন দেখো… 🔥🔥"
+  ];
 
-  if (sub === "off") {
-    coolLines.forEach((msg, i) => {
-      setTimeout(() => api.sendMessage(msg, threadID), i * 2000); // প্রতি ২ সেকেন্ডে
-    });
-    return;
-  }
+  const nonHoonCool = [
+    "🧊 তুমি শুধু প্রজা! HOON ছাড়া ফায়ার মোড বন্ধ করা যাবে না 🐸",
+    "💧 চুপচাপ থাকো, আগুন নিভেছে। শান্তি ফিরে এসেছে 🌙",
+    "😌 সবকিছু এখন শান্ত এবং ঠান্ডা ❄️"
+  ];
 
-  // শুধু ".fire" দিলে স্ট্যাটাস দেখাবে
-  api.sendMessage("🔥 রাজকীয় ফায়ার মোড স্ট্যাটাস: ON/OFF (HOON মোড অনুযায়ী)", threadID);
+  // Command handler
+  if (sender === hoonID) {
+    if (sub === "on") {
+      fireLines.forEach((msg, i) => {
+        setTimeout(() => api.sendMessage(msg, threadID), i * 2000);
+      });
+      return;
+    }
+
+    if (sub === "off") {
+      coolLines.forEach((msg, i) => {
+        setTimeout(() => api.sendMessage(msg, threadID), i * 2000);
+      });
+      return;
+    }
+
+    // শুধু ".fire" দিলে স্ট্যাটাস দেখাবে
+    api.sendMessage("🔥 রাজকীয় ফায়ার মোড স্ট্যাটাস: ON/OFF (HOON মোড অনুযায়ী)", threadID);
+  } else {
+    // Non-HOON cinematic messages
+    if (sub === "on") {
+      nonHoonFire.forEach((msg, i) => {
+        setTimeout(() => api.sendMessage(msg, threadID), i * 2000);
+      });
+      return;
+    }
+
+    if (sub === "off") {
+      nonHoonCool.forEach((msg, i) => {
+        setTimeout(() => api.sendMessage(msg, threadID), i * 2000);
+      });
+      return;
+    }
+
+    // Non-HOON শুধু স্ট্যাটাস চাইলে
+    if (!sub) {
+      api.sendMessage("🔥 রাজকীয় ফায়ার মোড স্ট্যাটাস: HOON ছাড়া দেখা সম্ভব নয় 😎", threadID);
+    }
+  }
 };
