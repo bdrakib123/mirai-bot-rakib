@@ -54,7 +54,7 @@ function startBot() {
     });
 
     child.on("error", (err) => {
-        logger(`Child process error: ${err}`, "[ Error ]`);
+        logger(`Child process error: ${err}`, "[ Error ]");
     });
 }
 
