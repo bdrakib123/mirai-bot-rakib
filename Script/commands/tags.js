@@ -1,9 +1,9 @@
 module.exports.config = {
   name: "tags",
-  version: "1.1.0",
+  version: "1.2.0",
   hasPermssion: 0,
   credits: "𝐂𝐘𝐁𝐄𝐑 ☢️ BOT TEAM",
-  description: "Everyone mention & reply mention with custom message",
+  description: "Everyone mention & reply mention with default messages",
   commandCategory: "group",
   usages: ".everyone <message> OR reply + .mention <message>",
   cooldowns: 3
@@ -19,7 +19,8 @@ module.exports.run = async function({ api, event, args }) {
     const threadInfo = await api.getThreadInfo(threadID);
     const mentions = threadInfo.participantIDs.map(id => ({ id, tag: "@everyone" }));
 
-    const customMsg = args.slice(1).join(" ") || "@everyone";
+    // কাস্টম মেসেজ বা default
+    const customMsg = args.slice(1).join(" ") || "@everyone, দয়া করে সবাই মনোযোগ দাও! 😎";
 
     return api.sendMessage({
       body: customMsg,
@@ -30,7 +31,11 @@ module.exports.run = async function({ api, event, args }) {
   // =========================
   // 2️⃣ .mention ফিচার
   // =========================
-  if (event.type === "message_reply" && args[0] && args[0].toLowerCase() === "mention") {
+  if (args[0] && args[0].toLowerCase() === "mention") {
+    if (event.type !== "message_reply") {
+      return api.sendMessage("⚠️ এই কমান্ড ব্যবহার করার জন্য কারো মেসেজে reply দাও এবং তারপর .mention টাইপ করো।", threadID);
+    }
+
     const mentionID = event.messageReply.senderID;
     const userInfo = await api.getUserInfo(mentionID);
     const mentionName = userInfo[mentionID].name;
@@ -46,6 +51,11 @@ module.exports.run = async function({ api, event, args }) {
     }, threadID, event.messageID);
   }
 
-  // কোন ফিচার না মিললে
-  return api.sendMessage("⚠️ ব্যবহার: \n.everyone <message> OR reply + .mention <message>", threadID);
+  // =========================
+  // যদি কোন ফিচার না মিললে
+  // =========================
+  return api.sendMessage(
+    "⚠️ ব্যবহার: \n.everyone <message> OR reply + .mention <message>",
+    threadID
+  );
 };
