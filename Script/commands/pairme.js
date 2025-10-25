@@ -1,6 +1,8 @@
+const fs = require("fs");
+
 module.exports.config = {
   name: "pairme",
-  version: "1.0.0",
+  version: "1.0.1",
   hasPermssion: 0,
   credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝐀𝐌_ ☢️",
   description: "Pair yourself with a mentioned or replied user (photo version)",
@@ -68,7 +70,7 @@ module.exports.run = async function ({ api, event }) {
   // 🧩 Determine partner (reply > mention)
   let partnerID = null;
 
-  if (messageReply) {
+  if (messageReply && messageReply.senderID !== senderID) {
     partnerID = messageReply.senderID;
   } else if (Object.keys(mentions).length > 0) {
     partnerID = Object.keys(mentions)[0];
