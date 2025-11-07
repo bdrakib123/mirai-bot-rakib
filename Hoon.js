@@ -21,36 +21,33 @@ const BOT_DESC = pkg.description || "Islamick Chat Bot";
 
 // ==================== Express Server ====================
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
-// Ping route for Uptime Robot
 app.get("/", (req, res) => res.send("Bot is alive!"));
-
-// Start server
 app.listen(port, () => logger(`Server running on port ${port}...`, "[ Server ]"));
 
 // ==================== Global Error Handling ====================
-process.on('unhandledRejection', (reason, p) => {
+process.on("unhandledRejection", (reason, p) => {
     logger(`Unhandled Rejection at: Promise ${p} reason: ${reason}`, "[ Error ]");
 });
-
-process.on('uncaughtException', (err) => {
+process.on("uncaughtException", (err) => {
     logger(`Uncaught Exception: ${err}`, "[ Error ]");
 });
 
 // ==================== Start Bot Function ====================
+let child;
 function startBot() {
+    if (child) child.kill();
     logger("Starting Cyber.js bot...", "[ Bot ]");
 
-    const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "Cyber.js"], {
+    child = spawn("node", ["--trace-warnings", "--async-stack-traces", "Cyber.js"], {
         cwd: __dirname,
-        stdio: "inherit",
-        shell: true
+        stdio: "inherit"
     });
 
     child.on("close", (code) => {
         logger(`Bot exited with code ${code}. Restarting in 5s...`, "[ Bot ]");
-        setTimeout(() => startBot(), 5000); // 5 সেকেন্ড পরে restart
+        setTimeout(startBot, 5000);
     });
 
     child.on("error", (err) => {
