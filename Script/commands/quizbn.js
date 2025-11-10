@@ -24,7 +24,7 @@ module.exports.run = async function ({ api, event, args }) {
   // ===== স্কোর দেখার কমান্ড =====
   if (args[0] && args[0].toLowerCase() === "score") {
     const score = scores[sender] || 0;
-    return api.sendMessage(`🏆 তোমার বর্তমান স্কোর: ${score} পয়েন্ট`, event.threadID, event.messageID);
+    return api.sendMessage(`🏆 তোমার বর্তমান স্কোর: ${score} পয়েন্ট`, event.threadID, event.messageID);
   }
 
   // ===== লিডারবোর্ড =====
@@ -36,7 +36,7 @@ module.exports.run = async function ({ api, event, args }) {
     for (let i = 0; i < sorted.length; i++) {
       const [id, score] = sorted[i];
       const userName = (await api.getUserInfo(id))[id]?.name || "অজানা ইউজার";
-      msg += `${i + 1}. ${userName} — ${score} পয়েন্ট\n`;
+      msg += `${i + 1}. ${userName} — ${score} পয়েন্ট\n`;
     }
     msg += "━━━━━━━━━━━━━━━\n© ক্রেডিট: Hoon";
     return api.sendMessage(msg, event.threadID, event.messageID);
@@ -55,7 +55,7 @@ module.exports.run = async function ({ api, event, args }) {
   try {
     const res = await axios.get("https://mahbub-ullash.cyberbot.top/api/bangla-quiz");
     const data = res.data.message;
-    if (!data || !data.question) return api.sendMessage("⚠️ কুইজ প্রশ্ন আনতে সমস্যা হয়েছে!", event.threadID, event.messageID);
+    if (!data || !data.question) return api.sendMessage("⚠️ কুইজ প্রশ্ন আনতে সমস্যা হয়েছে!", event.threadID, event.messageID);
 
     let quizText;
     const isTrueFalse = !data.B && !data.C && !data.D;
@@ -68,7 +68,6 @@ module.exports.run = async function ({ api, event, args }) {
 ✅ True
 ❌ False
 ━━━━━━━━━━━━━━━
-⏰ সময়: 30 সেকেন্ড
 📩 উত্তর জানতে লেখো: .quizbn ans
 📚 মোট প্রশ্ন: ${data.totalQuestions}
 👤 লেখক: ${data.author.name}
@@ -84,7 +83,6 @@ B️⃣ ${data.B}
 C️⃣ ${data.C}
 D️⃣ ${data.D}
 ━━━━━━━━━━━━━━━
-⏰ সময়: 30 সেকেন্ড
 📩 উত্তর জানতে লেখো: .quizbn ans
 📚 মোট প্রশ্ন: ${data.totalQuestions}
 👤 লেখক: ${data.author.name}
@@ -106,14 +104,8 @@ D️⃣ ${data.D}
           messageID: info.messageID
         });
 
-        // টাইমার (৩০ সেকেন্ড)
-        setTimeout(() => {
-          const quiz = global.quizbnData[sender];
-          if (quiz && quiz.active) {
-            api.sendMessage(`⏰ সময় শেষ!\nসঠিক উত্তর হলো: ${data.answer}`, event.threadID);
-            delete global.quizbnData[sender];
-          }
-        }, 30000);
+        // 🚨 টাইমার ব্লকটি রিমুভ করা হয়েছে
+        
       }
     });
   } catch (err) {
@@ -129,17 +121,17 @@ module.exports.handleReply = async function ({ api, event, handleReply }) {
   const correctAnswer = handleReply.correct.toUpperCase();
 
   const quiz = global.quizbnData?.[sender];
-  if (!quiz || !quiz.active) return; // সময় শেষ হলে বা উত্তর হয়ে গেলে skip
+  if (!quiz || !quiz.active) return; // উত্তর হয়ে গেলে skip
 
   let reply;
   if (userAnswer === correctAnswer) {
-    reply = "✅ একদম ঠিক বলেছো! 🎉 +1 পয়েন্ট 🎯";
+    reply = "✅ একদম ঠিক বলেছো! 🎉 +1 পয়েন্ট 🎯";
     scores[sender] = (scores[sender] || 0) + 1;
   } else {
     reply = `❌ ভুল উত্তর!\nসঠিক উত্তর হলো: ${correctAnswer}`;
   }
 
-  // উত্তর হয়ে গেলে deactivate
+  // উত্তর হয়ে গেলে deactivate
   quiz.active = false;
   fs.writeFileSync(scoreFile, JSON.stringify(scores, null, 2));
   api.sendMessage(reply, event.threadID, event.messageID);
