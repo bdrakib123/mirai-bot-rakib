@@ -1,91 +1,99 @@
 module.exports.config = {
-    name: "usta",
-    version: "1.0.2",
-    hasPermssion: 0,
-    credits: "RAKIB (Kick Head Ver.)",
-    description: "যাকে রিপ্লাই বা ম্যানশন করবে, তাকে কিক দিচ্ছে এমন মজার ছবি পাঠাবে",
-    commandCategory: "Picture",
-    cooldowns: 5,
-    dependencies: {
-        "axios": "",
-        "fs-extra": "",
-        "jimp": ""
-    }
+ name: "usta",
+ version: "1.0.1",
+ hasPermssion: 0,
+ credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
+ description: "Pair two users with a fun compatibility score",
+ commandCategory: "Picture",
+ cooldowns: 5,
+ dependencies: {
+ "axios": "",
+ "fs-extra": "",
+ "jimp": ""
+ }
 };
 
 module.exports.onLoad = async () => {
-    const { resolve } = global.nodemodule["path"];
-    const { existsSync, mkdirSync } = global.nodemodule["fs-extra"];
-    const { downloadFile } = global.utils;
-    const dirMaterial = __dirname + `/cache/canvas/`;
-    const path = resolve(__dirname, 'cache/canvas', 'usta.png');
-    if (!existsSync(dirMaterial)) mkdirSync(dirMaterial, { recursive: true });
-    if (!existsSync(path)) await downloadFile("https://i.imgur.com/KqFFME3.png", path);
+ const { resolve } = global.nodemodule["path"];
+ const { existsSync, mkdirSync } = global.nodemodule["fs-extra"];
+ const { downloadFile } = global.utils;
+ const dirMaterial = __dirname + `/cache/canvas/`;
+ const path = resolve(__dirname, 'cache/canvas', 'usta.png');
+ if (!existsSync(dirMaterial + "canvas")) mkdirSync(dirMaterial, { recursive: true });
+ if (!existsSync(path)) await downloadFile("https://i.imgur.com/SgkRkUt.png", path);
 };
 
 async function makeImage({ one, two }) {
-    const fs = global.nodemodule["fs-extra"];
-    const path = global.nodemodule["path"];
-    const axios = global.nodemodule["axios"];
-    const jimp = global.nodemodule["jimp"];
-    const __root = path.resolve(__dirname, "cache", "canvas");
+ const fs = global.nodemodule["fs-extra"];
+ const path = global.nodemodule["path"];
+ const axios = global.nodemodule["axios"];
+ const jimp = global.nodemodule["jimp"];
+ const __root = path.resolve(__dirname, "cache", "canvas");
 
-    let base_img = await jimp.read(__root + "/usta.png");
-    let pathImg = __root + `/usta_${one}_${two}.png`;
-    let avatarOne = __root + `/avt_${one}.png`;
-    let avatarTwo = __root + `/avt_${two}.png`;
+ let pairing_img = await jimp.read(__root + "/pairing.png");
+ let pathImg = __root + `/pairing_${one}_${two}.png`;
+ let avatarOne = __root + `/avt_${one}.png`;
+ let avatarTwo = __root + `/avt_${two}.png`;
 
-    let getAvatarOne = (await axios.get(`https://graph.facebook.com/${one}/picture?width=512&height=512`, { responseType: 'arraybuffer' })).data;
-    fs.writeFileSync(avatarOne, Buffer.from(getAvatarOne, 'utf-8'));
-    let getAvatarTwo = (await axios.get(`https://graph.facebook.com/${two}/picture?width=512&height=512`, { responseType: 'arraybuffer' })).data;
-    fs.writeFileSync(avatarTwo, Buffer.from(getAvatarTwo, 'utf-8'));
+ let getAvatarOne = (await axios.get(`https://graph.facebook.com/${one}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`, { responseType: 'arraybuffer' })).data;
+ fs.writeFileSync(avatarOne, Buffer.from(getAvatarOne, 'utf-8'));
 
-    let circleOne = await jimp.read(await circle(avatarOne)); // sender
-    let circleTwo = await jimp.read(await circle(avatarTwo)); // mention
+ let getAvatarTwo = (await axios.get(`https://graph.facebook.com/${two}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`, { responseType: 'arraybuffer' })).data;
+ fs.writeFileSync(avatarTwo, Buffer.from(getAvatarTwo, 'utf-8'));
 
-    // 🥋 Place avatars on heads
-    base_img
-        .composite(circleOne.resize(120, 120), 910, 130)  // kicker (sender)
-        .composite(circleTwo.resize(130, 130), 420, 160); // getting kicked (mention)
+ let circleOne = await jimp.read(await circle(avatarOne));
+ let circleTwo = await jimp.read(await circle(avatarTwo));
+ pairing_img.composite(circleOne.resize(150, 150), 980, 200).composite(circleTwo.resize(150, 150), 140, 200);
 
-    let raw = await base_img.getBufferAsync("image/png");
-    fs.writeFileSync(pathImg, raw);
-    fs.unlinkSync(avatarOne);
-    fs.unlinkSync(avatarTwo);
-    return pathImg;
+ let raw = await pairing_img.getBufferAsync("image/png");
+
+ fs.writeFileSync(pathImg, raw);
+ fs.unlinkSync(avatarOne);
+ fs.unlinkSync(avatarTwo);
+
+ return pathImg;
 }
 
 async function circle(image) {
-    const jimp = require("jimp");
-    image = await jimp.read(image);
-    image.circle();
-    return await image.getBufferAsync("image/png");
+ const jimp = require("jimp");
+ image = await jimp.read(image);
+ image.circle();
+ return await image.getBufferAsync("image/png");
 }
 
 module.exports.run = async function ({ api, event }) {
-    const fs = require("fs-extra");
-    const { threadID, messageID, senderID } = event;
-    let mentions = [];
-    let partnerID;
+ const axios = require("axios");
+ const fs = require("fs-extra");
+ const { threadID, messageID, senderID } = event;
 
-    if (event.messageReply) {
-        partnerID = event.messageReply.senderID;
-        mentions.push({ id: senderID, tag: (await api.getUserInfo(senderID))[senderID].name });
-        mentions.push({ id: partnerID, tag: (await api.getUserInfo(partnerID))[partnerID].name });
-    } else if (event.mentions && Object.keys(event.mentions).length > 0) {
-        partnerID = Object.keys(event.mentions)[0];
-        mentions.push({ id: senderID, tag: (await api.getUserInfo(senderID))[senderID].name });
-        mentions.push({ id: partnerID, tag: (await api.getUserInfo(partnerID))[partnerID].name });
-    } else {
-        return api.sendMessage("রিপ্লাই বা ম্যানশন করতে হবে।", threadID);
-    }
+ // Match percentage
+ const percentages = ['21%', '67%', '19%', '37%', '17%', '96%', '52%', '62%', '76%', '83%', '100%', '99%', '0%', '48%'];
+ const matchRate = percentages[Math.floor(Math.random() * percentages.length)];
 
-    let one = senderID, two = partnerID;
-    return makeImage({ one, two }).then(path => {
-        api.sendMessage({
-            body: "এই নে উষ্টা খা 💥🥋",
-            mentions,
-            attachment: fs.createReadStream(path)
-        }, threadID, () => fs.unlinkSync(path), messageID);
-    });
+ // Sender info
+ let senderInfo = await api.getUserInfo(senderID);
+ let senderName = senderInfo[senderID].name;
+
+ // Random partner
+ let threadInfo = await api.getThreadInfo(threadID);
+ let participants = threadInfo.participantIDs.filter(id => id !== senderID);
+ let partnerID = participants[Math.floor(Math.random() * participants.length)];
+ let partnerInfo = await api.getUserInfo(partnerID);
+ let partnerName = partnerInfo[partnerID].name;
+
+ // Mentions
+ let mentions = [
+ { id: senderID, tag: senderName },
+ { id: partnerID, tag: partnerName }
+ ];
+
+ // Generate and send image
+ let one = senderID, two = partnerID;
+ return makeImage({ one, two }).then(path => {
+ api.sendMessage({
+ body: `🥰 Successful Pairing!\n💌 Wishing you two a lifetime of unexpected happiness – even with a ${matchRate} match!\n💕 Compatibility Score: ${matchRate}\nUnlikely but Unstoppable: [${senderName} + ${partnerName}]👨‍❤️‍👨`,
+ mentions,
+ attachment: fs.createReadStream(path)
+ }, threadID, () => fs.unlinkSync(path), messageID);
+ });
 };
