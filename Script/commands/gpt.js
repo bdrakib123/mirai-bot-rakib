@@ -24,7 +24,7 @@ module.exports.run = async function ({ api, event, args }) {
   }
 
   const question = args.join(" ");
-  const url = `https://mahbub-ullash.cyberbot.top/api/aichat?question=${encodeURIComponent(question)}`;
+  const url = `https://mahbub-ullash.cyberbot.top/api/deepai?query=hi${encodeURIComponent(question)}`;
 
   try {
     const res = await axios.get(url, {
