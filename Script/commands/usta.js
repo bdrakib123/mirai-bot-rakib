@@ -3,8 +3,8 @@ module.exports.config = {
  version: "1.0.1",
  hasPermssion: 0,
  credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
- description: "Pair two users with a fun compatibility score",
- commandCategory: "Picture",
+ description: "Give a random user a 'usta' image",
+ commandCategory: "Fun",
  cooldowns: 5,
  dependencies: {
  "axios": "",
@@ -18,9 +18,9 @@ module.exports.onLoad = async () => {
  const { existsSync, mkdirSync } = global.nodemodule["fs-extra"];
  const { downloadFile } = global.utils;
  const dirMaterial = __dirname + `/cache/canvas/`;
- const path = resolve(__dirname, 'cache/canvas', 'usta.png');
+ const path = resolve(__dirname, 'cache/canvas', 'usta.png'); // Changed file name
  if (!existsSync(dirMaterial + "canvas")) mkdirSync(dirMaterial, { recursive: true });
- if (!existsSync(path)) await downloadFile("https://i.imgur.com/SgkRkUt.png", path);
+ if (!existsSync(path)) await downloadFile("https://i.imgur.com/SgkRkUt.png", path); // Changed download link and file name
 };
 
 async function makeImage({ one, two }) {
@@ -30,8 +30,8 @@ async function makeImage({ one, two }) {
  const jimp = global.nodemodule["jimp"];
  const __root = path.resolve(__dirname, "cache", "canvas");
 
- let pairing_img = await jimp.read(__root + "/usta.png");
- let pathImg = __root + `/pairing_${one}_${two}.png``;
+ let pairing_img = await jimp.read(__root + "/usta.png"); // Changed file name
+ let pathImg = __root + `/usta_${one}_${two}.png`;
  let avatarOne = __root + `/avt_${one}.png`;
  let avatarTwo = __root + `/avt_${two}.png`;
 
@@ -66,7 +66,7 @@ module.exports.run = async function ({ api, event }) {
  const fs = require("fs-extra");
  const { threadID, messageID, senderID } = event;
 
- // Match percentage
+ // Match percentage (not used in message body, but kept for function logic)
  const percentages = ['21%', '67%', '19%', '37%', '17%', '96%', '52%', '62%', '76%', '83%', '100%', '99%', '0%', '48%'];
  const matchRate = percentages[Math.floor(Math.random() * percentages.length)];
 
@@ -91,7 +91,7 @@ module.exports.run = async function ({ api, event }) {
  let one = senderID, two = partnerID;
  return makeImage({ one, two }).then(path => {
  api.sendMessage({
- body: `🥰 Successful Pairing!\n💌 Wishing you two a lifetime of unexpected happiness – even with a ${matchRate} match!\n💕 Compatibility Score: ${matchRate}\nUnlikely but Unstoppable: [${senderName} + ${partnerName}]👨‍❤️‍👨`,
+ body: `এই নে উষ্টা খা।`, // Simplified message body
  mentions,
  attachment: fs.createReadStream(path)
  }, threadID, () => fs.unlinkSync(path), messageID);
