@@ -1,6 +1,6 @@
 module.exports.config = {
   name: "usta",
-  version: "1.0.3",
+  version: "1.0.4",
   hasPermssion: 0,
   credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝑶𝑻 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
   description: "Give a random user a 'usta' image (reply or mention supported)",
@@ -14,11 +14,11 @@ module.exports.config = {
 };
 
 module.exports.onLoad = async () => {
-  // এখন কোনো ডাউনলোড দরকার নেই। শুধু ensure cache/canvas ফোল্ডার আছে কি না
   const fs = require("fs-extra");
   const path = require("path");
   const dir = path.resolve(__dirname, "cache", "canvas");
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  // ডাউনলোডের কোনো লজিক নেই, সরাসরি আপলোড করা uata.png ব্যবহার হবে
 };
 
 async function makeImage({ one, two }) {
@@ -29,12 +29,12 @@ async function makeImage({ one, two }) {
   const __root = path.resolve(__dirname, "cache", "canvas");
 
   try {
-    let pairing_img = await jimp.read(__root + "/usta.png");
+    let pairing_img = await jimp.read(__root + "/uata.png"); // এখানে uata.png
     let pathImg = __root + `/usta_${one}_${two}.png`;
     let avatarOne = __root + `/avt_${one}.png`;
     let avatarTwo = __root + `/avt_${two}.png`;
 
-    // ফেসবুক অ্যাভাটার ডাউনলোড
+    // FB avatar ডাউনলোড
     let getAvatarOne = (await axios.get(`https://graph.facebook.com/${one}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`, { responseType: 'arraybuffer' })).data;
     fs.writeFileSync(avatarOne, Buffer.from(getAvatarOne));
 
@@ -44,7 +44,8 @@ async function makeImage({ one, two }) {
     let circleOne = await jimp.read(await circle(avatarOne));
     let circleTwo = await jimp.read(await circle(avatarTwo));
 
-    pairing_img.composite(circleOne.resize(150, 150), 980, 200).composite(circleTwo.resize(150, 150), 140, 200);
+    pairing_img.composite(circleOne.resize(150, 150), 980, 200)
+               .composite(circleTwo.resize(150, 150), 140, 200);
 
     let raw = await pairing_img.getBufferAsync("image/png");
 
