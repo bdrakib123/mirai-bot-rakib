@@ -1,9 +1,9 @@
 module.exports.config = {
     name: "usta",
-    version: "1.0.1",
+    version: "1.0.2",
     hasPermssion: 0,
-    credits: "RAKIB",
-    description: "যাকে রিপ্লাই বা ম্যানশন করবে, তাকে একটি fun pair image পাঠাবে",
+    credits: "RAKIB (Kick Head Ver.)",
+    description: "যাকে রিপ্লাই বা ম্যানশন করবে, তাকে কিক দিচ্ছে এমন মজার ছবি পাঠাবে",
     commandCategory: "Picture",
     cooldowns: 5,
     dependencies: {
@@ -37,23 +37,21 @@ async function makeImage({ one, two }) {
 
     let getAvatarOne = (await axios.get(`https://graph.facebook.com/${one}/picture?width=512&height=512`, { responseType: 'arraybuffer' })).data;
     fs.writeFileSync(avatarOne, Buffer.from(getAvatarOne, 'utf-8'));
-
     let getAvatarTwo = (await axios.get(`https://graph.facebook.com/${two}/picture?width=512&height=512`, { responseType: 'arraybuffer' })).data;
     fs.writeFileSync(avatarTwo, Buffer.from(getAvatarTwo, 'utf-8'));
 
-    let circleOne = await jimp.read(await circle(avatarOne));
-    let circleTwo = await jimp.read(await circle(avatarTwo));
+    let circleOne = await jimp.read(await circle(avatarOne)); // sender
+    let circleTwo = await jimp.read(await circle(avatarTwo)); // mention
 
-    // ✅ Hug style avatar placement (same as hugv2)
+    // 🥋 Place avatars on heads
     base_img
-        .composite(circleOne.resize(100, 100), 370, 40)   // sender’s face
-        .composite(circleTwo.resize(100, 100), 330, 150); // mentioned/replied face
+        .composite(circleOne.resize(120, 120), 910, 130)  // kicker (sender)
+        .composite(circleTwo.resize(130, 130), 420, 160); // getting kicked (mention)
 
     let raw = await base_img.getBufferAsync("image/png");
     fs.writeFileSync(pathImg, raw);
     fs.unlinkSync(avatarOne);
     fs.unlinkSync(avatarTwo);
-
     return pathImg;
 }
 
@@ -67,7 +65,6 @@ async function circle(image) {
 module.exports.run = async function ({ api, event }) {
     const fs = require("fs-extra");
     const { threadID, messageID, senderID } = event;
-
     let mentions = [];
     let partnerID;
 
@@ -75,12 +72,10 @@ module.exports.run = async function ({ api, event }) {
         partnerID = event.messageReply.senderID;
         mentions.push({ id: senderID, tag: (await api.getUserInfo(senderID))[senderID].name });
         mentions.push({ id: partnerID, tag: (await api.getUserInfo(partnerID))[partnerID].name });
-
     } else if (event.mentions && Object.keys(event.mentions).length > 0) {
         partnerID = Object.keys(event.mentions)[0];
         mentions.push({ id: senderID, tag: (await api.getUserInfo(senderID))[senderID].name });
         mentions.push({ id: partnerID, tag: (await api.getUserInfo(partnerID))[partnerID].name });
-
     } else {
         return api.sendMessage("রিপ্লাই বা ম্যানশন করতে হবে।", threadID);
     }
@@ -88,7 +83,7 @@ module.exports.run = async function ({ api, event }) {
     let one = senderID, two = partnerID;
     return makeImage({ one, two }).then(path => {
         api.sendMessage({
-            body: "এই নে উষ্টা খা",
+            body: "এই নে উষ্টা খা 💥🥋",
             mentions,
             attachment: fs.createReadStream(path)
         }, threadID, () => fs.unlinkSync(path), messageID);
