@@ -15,10 +15,12 @@ module.exports.run = async function({ api, event }) {
         if (event.type === "message_reply") mention = event.messageReply.senderID; // রিপ্লাই
         else if (event.mentions && Object.keys(event.mentions).length > 0) mention = Object.keys(event.mentions)[0]; // ম্যানশন
 
+        const gifUrl = "https://i.imgur.com/gcWDMdp.gif";
+
         return api.sendMessage({
             body: `@${mention} এই নে উষ্টা খা 🦵`,
             mentions: [{ tag: `@${mention}`, id: mention }],
-            attachment: ["https://raw.githubusercontent.com/bdrakib123/cyber-bot-rakib/main/Script/commands/cache/canvas/usta.gif"]
+            attachment: [gifUrl]
         }, event.threadID);
 
     } catch (err) {
