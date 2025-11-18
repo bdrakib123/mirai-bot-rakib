@@ -9,7 +9,7 @@
     "autoClean": true,
     "commandDisabled": [],
     "eventDisabled": [],
-    "EMAIL": "100052705607822",
+    "EMAIL": "bd.devil.leader@gmail.com",
     "PASSWORD": "@bdraqib@123",
     "OTPKEY": "",
     "BOTNAME": "☢️HOON VAIER 𖣘 KAMLA⚠️",
@@ -29,7 +29,7 @@
     },
     "APPSTATEPATH": "appstate.json",
     "AUTO_REFRESH_COOKIE": true,
-    "REFRESH_INTERVAL": 1800000,
+    "REFRESH_INTERVAL": 900000,
     "FORCE_LOGIN_ON_REFRESH": true,
     "LOG_REFRESH_STATUS": true,
     "FCAOption": {
