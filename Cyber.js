@@ -354,7 +354,7 @@ function a0_0x5550() {
         'zuDeO',
         'checkBan',
         'YZpnF',
-        '𝐀𝐈\x20𝐁\x20𝐎',
+        '𝐀𝐈\x20𖣘\x20𝐁𝐎',
         'sbWFh',
         'slice',
         '█████╗░░██',
