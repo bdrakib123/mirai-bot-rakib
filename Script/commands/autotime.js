@@ -162,8 +162,8 @@ module.exports.onLoad = (_0x51a72a) =>
       (á = nam.find(
         (_0x32e72f) =>
           _0x32e72f.timer ==
-          new Date(Date.now() + 25200000)
-            .toLocaleString()
+          new Date()
+            .toLocaleString("en-US", { timeZone: "Asia/Dhaka" })
             .split(/,/)
             .pop()
             .trim()
