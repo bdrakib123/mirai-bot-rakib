@@ -2,7 +2,7 @@ module.exports.config = {
     name: "autosetname",
     version: "1.0.1",
     hasPermssion: 1,
-    credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
+    credits: "𝐌𝐈𝐑𝐀𝐈 𝐁𝐎𝐓 𝐑𝐀𝐊𝐈𝐁",
     description: "Automatic setname for new members",
     commandCategory: "Box Chat",
     usages: "[add <name> /remove] ",
