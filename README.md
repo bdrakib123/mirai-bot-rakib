@@ -1,4 +1,4 @@
-# ⚡ 𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑹𝑨𝑲𝑰𝑩_ ☢️
+# ☢ 𝐌𝐈𝐑𝐀𝐈 𖣘 𝐁𝐎𝐓 ⚠ 𝐑𝐀𝐊𝐈𝐁
 
 <p align="center">
   <img src="https://i.imgur.com/hsd22cv.jpeg" alt="Bot Preview" width="400" style="border-radius:20px; box-shadow:0 0 35px rgba(0,255,255,0.8); background: linear-gradient(135deg,#00ffff33,#ff00ff33); padding:15px; border:1px solid rgba(255,255,255,0.2);">
