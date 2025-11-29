@@ -1,7 +1,7 @@
 {
-  "name": "ISLAMICK BOT",
+  "name": "𝐌𝐈𝐑𝐀𝐈 𖣘 𝐁𝐎𝐓",
   "version": "5.0.0",
-  "description": "made by 𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_☢️",
+  "description": "made by ☢ 𝐌𝐈𝐑𝐀𝐈 𖣘 𝐁𝐎𝐓 ⚠ 𝐑𝐀𝐊𝐈𝐁",
   "main": "Cyber.js",
   "engines": {
     "node": ">=20.18.1",
@@ -14,7 +14,7 @@
   },
   "repository": {
       "type": "git",
-      "url": "https://github.com/bdrakib123/cyber-bot-rakib.git"
+      "url": "https://github.com/bdrakib123/mirai-bot-rakib.git"
   },
   "keywords": [
       "bot",
@@ -25,16 +25,16 @@
       "hoon",
       "cyberhoon",
       "cyberRakib ",
-      "islamick chat bot",
+      "mirai chat bot",
       "grandpa academy",
       "cyberbot.top"
   ],
   "author": "Hoon",
   "license": "GPL-3.0",
   "bugs": {
-      "url": "https://github.com/bdrakib123/cyber-bot-rakib/issues"
+      "url": "https://github.com/bdrakib123/mirai-bot-rakib/issues"
   },
-  "homepage": "https://github.com/bdrakib123/cyber-bot-rakib/issues",
+  "homepage": "https://github.com/bdrakib123/mirai-bot-rakib/issues",
   "dependencies": {
       "@distube/ytdl-core": "^4.13.2",
       "@miraipr0ject/assets": "^1.0.9",
